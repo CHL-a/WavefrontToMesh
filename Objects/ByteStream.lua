@@ -240,7 +240,15 @@ function ByteStream.new(v, app)
 			for i = 1, select('#', ...) do
 				-- pre
 				local n = select(i, ...)
-				assert(n % 1 == 0 and n >= 0)
+				assert(
+					n % 1 == 0 and n >= 0,
+					('non natural number: %s\n' ..
+					'traceback: %s'):format(
+						n,
+						debug.traceback()
+					)
+					
+				)
 				
 				
 				-- main
@@ -277,7 +285,13 @@ function ByteStream.new(v, app)
 			local m, e = math.frexp(n)
 			local sign = m < 0 and 1 or 0
 			
-			m = math.ceil((math.abs(m) - .5) * 2 ^ 24)
+			m = math.ceil(
+				math.max(
+					math.abs(m) - .5,
+					0
+				)
+				* 2 ^ 24
+			)
 			e =e+ 126
 			
 			local temp = {
@@ -324,6 +338,7 @@ function ByteStream.new(v, app)
 			end
 
 			for i = 1, 4 do
+				print(i, temp[i], sign, e ,m, n)
 				object.appendBytes(temp[i])
 			end
 			
