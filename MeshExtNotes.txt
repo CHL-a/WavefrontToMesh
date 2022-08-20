@@ -1,0 +1,52 @@
+```
+Notes:
+  * .obj:
+    * stupidly easy
+    * human readable, a non-binary file
+    * each line has a prefix and arguments separated by spaces
+    * sigificant prefixes (aka elements):
+      * v
+        * name: vertex
+        * after the prefix, are 3 numbers representing as a position in 3d space
+      * f 
+        * name: face
+        * after the prefix, are 3 ints representing the vertexes that the triangle's vertexes will be 
+          attached to
+  * .mesh 
+    * possibly a roblox exclusive, documentation is scarce
+    * not alot of documentation
+      * view these sources below:
+        a) http://codenautics.com/meshwork/
+    * also called a meshwork model file, this term should be used for searching
+    * binary file
+    * file format: 
+	  (being inclusive about the bytes)
++-----+-------------+-----------------------------------------------------------------+
+|Bytes|type         |Description                                                      |
++-----+-------------+-----------------------------------------------------------------+
+|1-8  |Constant (K) |"version "                                                       |
+|9-12 |string       |Represents the version number, ex: "2.00"                        |
+|13   |unknown      |observed to be 0x0A atm                                          |
+|14-17|unknown      |This part is a version 2.00 exclusive, for 4.00, there's a 4 byte|
+|     |             |int, lil endian indicating the length, as n, and n amount of     |
+|     |             |bytes after so                                                   |
+|18-21|int (lil end)|amount of vertexes                                               |
+|22-25|^            |faces amount                                                     |
++-----+-------------+-----------------------------------------------------------------+
+
+      * after the amount of faces, comes a collection of bytes defining a vertex
++-----+----------------+-----------------------------------------------------------------+
+|Bytes|type            |Description                                                      |
++-----+----------------+-----------------------------------------------------------------+
+|1-4  |float, (lil end)|Vertex Position X                                                |
+|5-8  |^               |^      ^ Y                                                       |
+|9-12 |^               |^      ^ Z                                                       |
+|13-16|^               |vn     ^ X                                                       |
+|17-20|^               |^      ^ Y                                                       |
+|21-24|^               |^      ^ Z                                                       |
+|25-40|unknown         |prob suggests a bone but atm, it has a constant of 0, 1, 0 in    |
+|     |                |floats and the succeeding 4 bytes, each containing 0xFF          |
++-----+----------------+-----------------------------------------------------------------+
+
+      * after that, comes a sequence of 4 byte lil end ints, starting at 0, up to (faces amount - 1)
+```
