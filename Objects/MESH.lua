@@ -1,8 +1,8 @@
 local MESH = {}
-local obj = require('a.OBJ')
-local ByteStream = require('a.ByteStream')
-local StringRadix = require('a.StringRadix')
-local Static = require('a.Static')
+local obj = require('Objects.OBJ')
+local ByteStream = require('Objects.ByteStream')
+local StringRadix = require('Objects.StringRadix')
+local Static = require('Objects.Static')
 
 local function debugStream(d)
 	local e = {StringRadix.hexdecimal.getDigitSequence(unpack(d))}

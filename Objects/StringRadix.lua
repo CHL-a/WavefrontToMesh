@@ -1,6 +1,6 @@
 local StringRadix = {}
-local Radix = require('a.Radix')
-string.split = require('a.Static').string.split
+local Radix = require('Objects.Radix')
+string.split = require('Objects.Static').string.split
 
 function StringRadix.new(hashMap, decimal)
 	-- pre

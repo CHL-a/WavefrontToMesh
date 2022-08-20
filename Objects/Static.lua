@@ -29,6 +29,7 @@ function Static.string.split(s, spl, isRaw)
 
 	return result
 end
+--[[Roblox only static function
 -- converts Color3uint8 to Color3
 function Static.color.fromColor3uint8(n)
 	-- pre
@@ -47,6 +48,7 @@ function Static.color.fromColor3uint8(n)
 	
 	return Color3.fromRGB(unpack(args))
 end
+--]]
 
 --[[
 	Gets the position of some digit
@@ -97,7 +99,9 @@ function Static.math.getDigits(n, base)
 	local result = 1
 	
 	if n > 0 then
-		result = result + math.floor(math.log(n, base))
+		result = result + math.floor(
+			math.log(n) / math.log(base)
+		)
 	end
 	
 	return result

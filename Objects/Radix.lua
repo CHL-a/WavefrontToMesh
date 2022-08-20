@@ -1,5 +1,5 @@
 local Radix = {}
-local Static = require('a.Static')
+local Static = require('Objects.Static')
 
 function Radix.new(hashMap, decimal)
 	-- pre

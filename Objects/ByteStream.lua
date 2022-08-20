@@ -13,9 +13,9 @@
 	 * numbers indicate bit position not an actual possible bit value
 --]]
 local ByteStream = {}
-local Stream = require('a.Stream')
-local Static = require('a.Static')
-local StringRadix = require('a.StringRadix')
+local Stream = require('Objects.Stream')
+local Static = require('Objects.Static')
+local StringRadix = require('Objects.StringRadix')
 
 function ByteStream.valueToFuncHelper(value)
 	-- pre
@@ -147,6 +147,7 @@ function ByteStream.new(v, app)
 			for i = 1, select('#', ...) do
 				local byte = object.getBytes()
 				if select(i, ...) ~= byte then
+---@diagnostic disable-next-line: cast-local-type
 					resultA = i
 					resultB = byte
 					break

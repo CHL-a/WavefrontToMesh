@@ -1,6 +1,6 @@
 local OBJ = {}
 
-local StringParser = require('a.StringParser')
+local StringParser = require('Objects.StringParser')
 Vector3 = {new=function(a,b,c)
 	local result 
 	result = setmetatable({
