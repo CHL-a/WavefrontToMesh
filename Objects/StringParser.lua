@@ -110,7 +110,6 @@ function StringParser.new(s)
 			
 			if not lines[j] then
 				i = i - 1
-				print(i, j, lines)
 				break
 			end
 		end
