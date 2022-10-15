@@ -338,7 +338,6 @@ function ByteStream.new(v, app)
 			end
 
 			for i = 1, 4 do
-				print(i, temp[i], sign, e ,m, n)
 				object.appendBytes(temp[i])
 			end
 			
