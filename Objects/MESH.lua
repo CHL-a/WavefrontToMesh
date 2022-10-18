@@ -14,15 +14,43 @@ local function debugStream(d)
 	print(('(%s)'):format(table.concat(e, ' ')))
 end
 
+---@param a OBJ.object
+---@return string
+function MESH.convertOBJToMESH1_01(a)
+	local result = 'version 1.01\n' .. (#a.faces) .. '\n'
+
+	for _, b in next, a.faces do
+		local mid, c, d = a.vertexes[b[1]], a.vertexes[b[2]], a.vertexes[b[3]]
+	
+		local e, f = mid.sub(c), mid.sub(d)
+		local cross = e.getCrossProduct(f).getUnit()
+
+		for g = 1, 3 do
+			local h = a.vertexes[b[g]]
+
+			result = result .. ('[%s,%s,%s][%s,%s,%s][0,1,0]'):format(
+				h.x,h.y,h.z,
+				cross.x,cross.y,cross.z
+			)
+		end
+	end
+
+	return result
+end
+
+---@deprecated
+---Note the bug that miscolored faces may appear
 function MESH.convertOBJToMESH(a)
 	local subResult = {('version 2.00'):byte(1, 12)}
 	
 	local stream = ByteStream.new(subResult)
-	
-	--debugStream(subResult)
-
 	-- 5 unknown bytes
-	stream.appendBytes(0x0A, 0x0C, 0x00, 0x28, 0x0C)
+	stream.appendBytes(
+		0x0A, 
+		0x0C, 0x00, 
+		0x28, 
+		0x0C
+	)
 	--debugStream(subResult)
 
 	-- vert and vn amount
@@ -32,35 +60,48 @@ function MESH.convertOBJToMESH(a)
 	stream.appendInt(#a.faces, true)
 	
 	-- per vertice and vn
-	for A, b in next, a.faces do
+	for _, b in next, a.faces do
+		---@type Vector3.object
 		local mid, v, w = 
 			a.vertexes[b[1]],
 			a.vertexes[b[2]],
 			a.vertexes[b[3]]
+
+		--local isMutated = tostring(mid.x):sub(1, 6) == '13.276'
+
+		--[[
+		if isMutated then
+			print(mid.toString()..'\n  '..v.toString()..'\n  '..w.toString())
+		end
+		--]]
 		
 		-- cross product
-		local vVect = mid - v
-		local wVect = mid - w
+		local vVect = mid.sub(v)
+		local wVect = mid.sub(w)
 		
-		local cross = vVect:Cross(wVect).Unit()
+		local cross = vVect.getCrossProduct(wVect).getUnit()
+
+		--[[
+		if isMutated then
+			print(vVect.getCrossProduct(wVect).getMagnitude(), cross.toString())
+		end
+		--]]
 		
 		-- append per vertice struct: vertice, vn and constant
 		for c = 1, 3 do
 			local d = a.vertexes[b[c]]
 			
-			stream.appendFloat(d.X, true)
-				.appendFloat(d.Y, true)
-				.appendFloat(d.Z, true)
-				.appendFloat(cross.X, true)
-				.appendFloat(cross.Y, true)
-				.appendFloat(cross.Z, true)
+			stream.appendFloat(d.x, true)
+				.appendFloat(d.y, true)
+				.appendFloat(d.z, true)
+				.appendFloat(cross.x, true)
+				.appendFloat(cross.y, true)
+				.appendFloat(cross.z, true)
 				.appendInt(0, true)
 				.appendFloat(1, true)
 				.appendInt(0, true)
 				.appendBytes(0xFF, 0xFF, 0xFF, 0xFF)
 		end
-		
-		
 	end
 
 	-- facecollectio

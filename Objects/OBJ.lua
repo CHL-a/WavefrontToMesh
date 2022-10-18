@@ -1,45 +1,13 @@
 local OBJ = {}
 
 local StringParser = require('Objects.StringParser')
-Vector3 = {new=function(a,b,c)
-	local result 
-	result = setmetatable({
-			X=a or 0,
-			Y=b or 0,
-	Z = c or 0;
-			m = function()
-				return (a^2+b^2+c^2)^.5
-			end;
-			Unit = function ()
-				return result / result.m()
-			end;
-			Cross=function(_,d)
-				return Vector3.new(
-					  b * d.Z - c   * d.Y,
-					-(a * d.Z - d.X * c),
-					  a * d.Y - d.X * b
-				)
-			end;
-		
-		},{
-			__div = function (_, d)
-				return Vector3.new(a/d,b/d,c/d)
-				
-			end;
-			__mul = function (_, d)
-				return Vector3.new(d *a,d*b,d*c)
-			end;
-			__add = function(_, d)
-				return Vector3.new(a+d.X,d.Y+b,d.Z+c)
-			end;
-			__sub = function(_, d)
-				return Vector3.new(a-d.X,b-d.Y,c-d.Z)
-			end;
-	})
+local Vector3 = require('Objects.Vector3')
 
-	return result
 
-end}
+---@class OBJ.object
+---@field faces integer[][]
+---@field vertexes Vector3.object[]
+
 function OBJ.new(content)
 	local parser = StringParser.new(content)
 	
